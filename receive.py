@@ -68,9 +68,10 @@ def simple_email(header, body,):
 
 if __name__ == '__main__':
     #  定时器，开始时间
-    targettimestr = input('请输入定点时间，例如8:00')
+    times=conf.get(section="time", option="now")
+    targettimestr = input('请输入定点时间，例如{times}'.format(times=times))
     if targettimestr == '':
-        targettimestr = conf.get(section='time', option='now')
+        targettimestr = times
     targettime = datetime.time(int(targettimestr.split(':')[0]), int(targettimestr.split(':')[1]))
     if not os.path.exists('json'):
         os.makedirs('json')
@@ -113,11 +114,14 @@ if __name__ == '__main__':
                 if body != "":
                     simple_email(header="{today}发送失败人员名单".format(today=datetime.date.today()),
                                  body=htmlstart + body + htmlend)
-                #  无其他异常情况下进入休眠
                 else:
-                    print("执行完毕，开始休眠{second}秒".format(second=timer(targettime)))
-                    logger.debug("执行完毕，开始休眠{second}秒".format(second=timer(targettime)))
-                    time.sleep(timer(targettime))
+                    logger.debug("无失败人员")
+                #  无其他异常情况下进入休眠
+            else:
+                logger.debug("数据读取失败")
+            print("执行完毕，开始休眠{second}秒".format(second=timer(targettime)))
+            logger.debug("执行完毕，开始休眠{second}秒".format(second=timer(targettime)))
+            time.sleep(timer(targettime))
         else:
             print("执行完毕，开始休眠{second}秒".format(second=timer(targettime)))
             logger.debug("执行完毕，开始休眠{second}秒".format(second=timer(targettime)))
