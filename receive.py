@@ -92,10 +92,10 @@ if __name__ == '__main__':
             logger.debug("开始读取数据")
             if os.path.exists(path=path):
                 data = json.load(open(path, 'r'))
-                htmlstart = r"""<h4>未发送的人员的手机号为<h4><ul>"""
-                htmlend = r"""<ul>"""
+                htmlstart = r"""<h4>未发送的人员的手机号为</h4><ul>"""
+                htmlend = r"""</ul>"""
                 body = ""
-                print(type(data))
+                # print(type(data))
                 for one in data:
                     try:
                         # for key, value in one.items():
@@ -104,7 +104,7 @@ if __name__ == '__main__':
                             # print(one.get('mobile', '无电话'))
                             assert one.get('mobile', '无电话'), "无电话号码错误"
                             logger.info("{Tel} 电话号码错误".format(Tel=one.get('mobile', '无电话')))
-                            body += "<li>{Tel}<li>".format(Tel=one.get('mobile', '无电话'))
+                            body += "<li>{Tel}</li>".format(Tel=one.get('mobile', '无电话'))
                         else:
                             logger.debug("{mobile} 在 {user_receive_time} 发送成功".format(
                                 mobile=one.get('mobile', '无电话'),
