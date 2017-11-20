@@ -6,6 +6,7 @@ import logging
 
 import os
 import platform
+import re
 from logging.handlers import TimedRotatingFileHandler
 
 import requests
@@ -91,7 +92,18 @@ if __name__ == '__main__':
             #  读取 json 数据，查看是否存在异常信息，如果存在异常信息，通过邮件模块发送邮件
             logger.debug("开始读取数据")
             if os.path.exists(path=path):
-                data = json.load(open(path, 'r'))
+                # 多条数据
+                with open(path, 'r') as f:
+                    string = f.read()
+                regex = r'(\[.+?\])'
+                result = re.findall(regex, string)
+                # print(result)
+                data = []
+                for one in result:
+                    # print(json.loads(one))
+                    if len(json.loads(one)):
+                        data += json.loads(one)
+                # data = json.load(open(path, 'r'))
                 htmlstart = r"""<h4>未发送的人员的手机号为</h4><ul>"""
                 htmlend = r"""</ul>"""
                 body = ""
